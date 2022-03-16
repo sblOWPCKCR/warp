@@ -1,4 +1,9 @@
 import os
+from generateMarkdown import (
+    builtin_instance_count,
+    steps_in_function_deploy,
+    steps_in_function_invoke,
+)
 
 from flask import Flask, jsonify, request
 from flask_cors import CORS
@@ -37,6 +42,8 @@ async def deploy():
     print(execution_info)
     print("----------\n")
     starknet_wrapper.address2contract[hex(contract_address)] = contract_def
+    steps_in_function_deploy(data["compiled_cairo"], execution_info)
+    builtin_instance_count(data["compiled_cairo"], execution_info)
     return jsonify(
         {
             "contract_address": hex(contract_address),
@@ -63,6 +70,8 @@ async def invoke():
         print("-----Invoke info-----")
         print(execution_info)
         print("----------\n")
+        steps_in_function_invoke(data["function"], execution_info)
+
         # Can add extra fields in here if and when tests need them
         return jsonify(
             {
