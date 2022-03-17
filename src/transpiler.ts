@@ -1,6 +1,5 @@
 import { ASTWriter, CompileFailedError, PrettyFormatter } from 'solc-typed-ast';
 import {
-  GettersPublicStateVars,
   AddressHandler,
   AnnotateImplicits,
   BuiltinHandler,
@@ -8,6 +7,8 @@ import {
   EnumConverter,
   ExpressionSplitter,
   ExternImporter,
+  FixFunctionCallReferences,
+  GettersPublicStateVars,
   IdentifierMangler,
   ImplicitConversionToExplicit,
   InheritanceInliner,
@@ -15,6 +16,7 @@ import {
   LiteralExpressionEvaluator,
   LoopFunctionaliser,
   MemoryHandler,
+  NamedArgsRemover,
   RejectUnsupportedFeatures,
   ReturnInserter,
   SourceUnitSplitter,
@@ -68,7 +70,9 @@ function applyPasses(ast: AST, options: TranspilationOptions): AST {
     ['Ru', RejectUnsupportedFeatures],
     ['L', LiteralExpressionEvaluator],
     ['Ufr', UsingForResolver],
+    ['Na', NamedArgsRemover],
     ['Gp', GettersPublicStateVars],
+    ['Ff', FixFunctionCallReferences],
     ['Ib', IntBoundCalculator],
     ['M', IdentifierMangler],
     ['Ii', InheritanceInliner],
